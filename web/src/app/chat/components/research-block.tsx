@@ -46,6 +46,7 @@ import { useReplay } from "~/core/replay";
 import { closeResearch, listenToPodcast, useStore } from "~/core/store";
 import { cn } from "~/lib/utils";
 
+import { registerChineseFont, CHINESE_FONT_NAME } from "~/lib/pdf-fonts";
 import { ResearchActivitiesBlock } from "./research-activities-block";
 import { ResearchReportBlock } from "./research-report-block";
 
@@ -185,6 +186,7 @@ ${htmlContent}
     setIsDownloading(true);
     try {
       const pdf = new jsPDF("p", "mm", "a4");
+      await registerChineseFont(pdf);
       const pageWidth = 210;
       const pageHeight = 297;
       const margin = 20;
@@ -210,7 +212,7 @@ ${htmlContent}
         if (line.startsWith("### ")) {
           const h3 = PDF_CONSTANTS.headings.h3;
           pdf.setFontSize(h3.fontSize);
-          pdf.setFont("helvetica", "bold");
+          pdf.setFont(CHINESE_FONT_NAME, "normal");
           const text = line.substring(4);
           const splitText = pdf.splitTextToSize(text, maxWidth);
           if (y + 10 > pageHeight - margin) {
@@ -222,7 +224,7 @@ ${htmlContent}
         } else if (line.startsWith("## ")) {
           const h2 = PDF_CONSTANTS.headings.h2;
           pdf.setFontSize(h2.fontSize);
-          pdf.setFont("helvetica", "bold");
+          pdf.setFont(CHINESE_FONT_NAME, "normal");
           const text = line.substring(3);
           const splitText = pdf.splitTextToSize(text, maxWidth);
           if (y + 12 > pageHeight - margin) {
@@ -234,7 +236,7 @@ ${htmlContent}
         } else if (line.startsWith("# ")) {
           const h1 = PDF_CONSTANTS.headings.h1;
           pdf.setFontSize(h1.fontSize);
-          pdf.setFont("helvetica", "bold");
+          pdf.setFont(CHINESE_FONT_NAME, "normal");
           const text = line.substring(2);
           const splitText = pdf.splitTextToSize(text, maxWidth);
           if (y + 14 > pageHeight - margin) {
@@ -247,7 +249,7 @@ ${htmlContent}
           // Unordered list item
           const textConfig = PDF_CONSTANTS.text;
           pdf.setFontSize(textConfig.fontSize);
-          pdf.setFont("helvetica", "normal");
+          pdf.setFont(CHINESE_FONT_NAME, "normal");
           const cleanText = line
             .substring(2)
             .replace(/\*\*(.*?)\*\*/g, "$1")
@@ -272,7 +274,7 @@ ${htmlContent}
           // Ordered list item
           const textConfig = PDF_CONSTANTS.text;
           pdf.setFontSize(textConfig.fontSize);
-          pdf.setFont("helvetica", "normal");
+          pdf.setFont(CHINESE_FONT_NAME, "normal");
           const match = /^(\d+)\.\s(.*)$/.exec(line);
           if (match?.[1] && match[2]) {
             const cleanText = match[2]
@@ -299,7 +301,7 @@ ${htmlContent}
           // Normal text
           const textConfig = PDF_CONSTANTS.text;
           pdf.setFontSize(textConfig.fontSize);
-          pdf.setFont("helvetica", "normal");
+          pdf.setFont(CHINESE_FONT_NAME, "normal");
           // Remove markdown formatting
           const cleanText = line
             .replace(/\*\*(.*?)\*\*/g, "$1")
