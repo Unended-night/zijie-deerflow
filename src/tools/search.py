@@ -14,6 +14,7 @@ from langchain_community.tools import (
 )
 from langchain_community.tools.arxiv import ArxivQueryRun
 from langchain_community.utilities import (
+    DuckDuckGoSearchAPIWrapper,
     ArxivAPIWrapper,
     BraveSearchWrapper,
     GoogleSerperAPIWrapper,
@@ -96,6 +97,7 @@ def get_web_search_tool(max_search_results: int):
         return LoggedDuckDuckGoSearch(
             name="web_search",
             num_results=max_search_results,
+            api_wrapper=DuckDuckGoSearchAPIWrapper(region="us-en"),
         )
     elif SELECTED_SEARCH_ENGINE == SearchEngine.BRAVE_SEARCH.value:
         return LoggedBraveSearch(
